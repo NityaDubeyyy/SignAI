@@ -1,0 +1,137 @@
+.translation-text {
+  position: relative;
+  height: 100%;
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background:
+    linear-gradient(180deg, rgba(var(--ion-color-primary-rgb), 0.04), transparent 42%),
+    var(--ion-background-color);
+
+  > .actions-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  > #suggestions {
+    min-height: 24px;
+    width: 100%;
+    color: var(--ion-color-medium);
+    font-size: 14px;
+    line-height: 20px;
+
+    ion-icon {
+      padding: 0 4px;
+      vertical-align: middle;
+    }
+
+    a {
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+    }
+  }
+}
+
+.clear-text-button {
+  flex: 0 0 auto;
+}
+
+.translation-history {
+  border-top: 1px solid var(--app-divider-color);
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--ion-color-medium);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.history-item {
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 0.24);
+  border-radius: 8px;
+  background: rgba(var(--ion-color-primary-rgb), 0.06);
+  color: var(--ion-text-color);
+  cursor: pointer;
+  font: inherit;
+  max-width: 100%;
+  min-height: 34px;
+  padding: 7px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(var(--ion-color-primary-rgb), 0.12);
+    border-color: rgba(var(--ion-color-primary-rgb), 0.48);
+    transform: translateY(-1px);
+  }
+}
+
+#spoken-language-label {
+  display: none;
+}
+
+#char-count {
+  flex-grow: 1;
+  align-self: center;
+  text-align: end;
+  font-size: 12px;
+  line-height: 40px;
+  padding-inline: 10px;
+  white-space: nowrap;
+}
+
+/* Numbers should always be left-to-right */
+::ng-deep html[dir='rtl'] #char-count {
+  direction: ltr;
+  text-align: start !important;
+}
+
+ion-textarea#mobile {
+  margin-top: 6px;
+  margin-bottom: 6px;
+  border-radius: 20px;
+  --padding-start: 10px;
+  --padding-bottom: var(--padding-top);
+  --highlight-color: var(--ion-color-primary);
+
+  &.sc-ion-textarea-ios-h {
+    /* Address strange height on iOS */
+    min-height: initial;
+
+    background-color: white;
+    @media (prefers-color-scheme: dark) {
+      background-color: #202124;
+    }
+  }
+}

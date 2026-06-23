@@ -1,0 +1,44 @@
+<ng-container *transloco="let t; read: 'settings.other.appearance'">
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button [text]="'settings.title' | transloco"></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{ t('title') }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content [fullscreen]="true">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-title size="large">{{ t('title') }}</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    @if (settingsState$ | async; as state) {
+      <ion-list>
+        <ion-list-header>
+          <ion-label>{{ t('theme') }}</ion-label>
+        </ion-list-header>
+        <ion-radio-group [value]="state.theme" (ionChange)="applySetting('theme', $event.detail.value)">
+          <ion-item>
+            <ion-radio value="system">{{ t('themeSystem') }}</ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-radio value="light">{{ t('themeLight') }}</ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-radio value="dark">{{ t('themeDark') }}</ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+    }
+
+    <app-settings-appearance-images />
+
+    <p>
+      <u>Note</u>: Supporting custom photos is possible.<br />
+      However, not a current priority. <br />
+      <a href="https://github.com/sign/translate/issues/33" target="_blank">GitHub Issue</a>.
+    </p>
+  </ion-content>
+</ng-container>

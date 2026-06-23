@@ -1,0 +1,180 @@
+<ion-header>
+  <ion-toolbar class="custom-toolbar">
+    <div class="header-left">
+      <div class="logo-wrapper">
+        <img src="assets/brand/logo.svg" class="logo-icon" alt="Logo" />
+        <span class="logo-text">SignAI</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <a class="nav-link active" routerLink="/">Home</a>
+      <button class="avatar-btn">AL</button>
+      <button class="more-btn">
+        <ion-icon name="ellipsis-vertical"></ion-icon>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="main-container">
+    <!-- Tab Bar -->
+    <div class="tabs-bar">
+      <button class="tab-btn" [class.active]="selectedTab === 'text'" (click)="selectTab('text')">
+        <ion-icon name="document-text"></ion-icon>
+        <span>Text</span>
+      </button>
+      <button class="tab-btn" [class.active]="selectedTab === 'camera'" (click)="selectTab('camera')">
+        <ion-icon name="camera"></ion-icon>
+        <span>Camera</span>
+      </button>
+      <button class="tab-btn" [class.active]="selectedTab === 'voice'" (click)="selectTab('voice')">
+        <ion-icon name="mic"></ion-icon>
+        <span>Voice</span>
+      </button>
+      <button class="tab-btn" [class.active]="selectedTab === 'upload'" (click)="selectTab('upload')">
+        <ion-icon name="cloud-upload"></ion-icon>
+        <span>Upload</span>
+      </button>
+    </div>
+
+    <!-- Cards Container -->
+    <div class="cards-split-container">
+      
+      <!-- Left Card (Source / Input) -->
+      <div class="panel-card card-left">
+        <div class="card-header">
+          @if (spokenToSigned) {
+            <app-language-selector
+              [hasLanguageDetection]="true"
+              [languages]="translation.spokenLanguages"
+              [language]="spokenLanguage$ | async"
+              translationKey="languages"
+              (languageChange)="setSpokenLanguage($event)"></app-language-selector>
+          } @else {
+            <app-language-selector
+              [flags]="true"
+              [hasLanguageDetection]="false"
+              [languages]="translation.signedLanguages"
+              [language]="signedLanguage$ | async"
+              translationKey="signedLanguagesShort"
+              (languageChange)="setSignedLanguage($event)"></app-language-selector>
+          }
+        </div>
+        
+        <div class="card-body">
+          @if (spokenToSigned) {
+            <app-spoken-language-input></app-spoken-language-input>
+          } @else {
+            <!-- Signed to Spoken Input Components -->
+            <div class="video-input-container">
+              @if (inputMode === 'upload') {
+                @if (videoState$ | async; as videoState) {
+                  @if (!videoState.src) {
+                    <app-upload></app-upload>
+                  } @else {
+                    <app-video [displayControls]="false" [displayFps]="false"></app-video>
+                  }
+                }
+              } @else if (inputMode === 'webcam') {
+                <app-video [displayControls]="false" [displayFps]="false"></app-video>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Swap Button Divider -->
+      <div class="divider-center">
+        <button class="swap-action-btn" (click)="swapLanguages()" title="Swap translation direction">
+          <ion-icon name="swap-horizontal"></ion-icon>
+        </button>
+      </div>
+
+      <!-- Right Card (Target / Output) -->
+      <div class="panel-card card-right">
+        <div class="card-header">
+          @if (spokenToSigned) {
+            <app-language-selector
+              [flags]="true"
+              [hasLanguageDetection]="false"
+              [languages]="translation.signedLanguages"
+              [language]="signedLanguage$ | async"
+              translationKey="signedLanguagesShort"
+              (languageChange)="setSignedLanguage($event)"></app-language-selector>
+          } @else {
+            <app-language-selector
+              [hasLanguageDetection]="false"
+              [languages]="translation.spokenLanguages"
+              [language]="spokenLanguage$ | async"
+              translationKey="languages"
+              (languageChange)="setSpokenLanguage($event)"></app-language-selector>
+          }
+        </div>
+
+        <div class="card-body">
+          @if (spokenToSigned) {
+            @if ((spokenLanguageText$ | async) === '') {
+              <!-- Avatar Silhouette Placeholder -->
+              <div class="placeholder-silhouette-container">
+                <div class="avatar-silhouette-box">
+                  <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <div class="divider-line"></div>
+                <p class="placeholder-message">Your sign language animation will appear here</p>
+                <button class="translate-btn" (click)="triggerTranslate()">
+                  <ion-icon name="play"></ion-icon>
+                  <span>Translate</span>
+                </button>
+              </div>
+            } @else {
+              <app-signed-language-output></app-signed-language-output>
+            }
+          } @else {
+            <!-- Text translation output -->
+            <div class="text-translation-output-container">
+              @if (spokenLanguageText$ | async; as translationText) {
+                <div class="output-text-content">{{ translationText }}</div>
+              } @else {
+                <div class="output-text-content placeholder-text">Translation will appear here...</div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Overlay footer for card output -->
+        @if (spokenToSigned && (spokenLanguageText$ | async) !== '') {
+          <div class="card-right-overlay-footer">
+            <span class="avatar-label-tag">ASL <span class="purple-dot">•</span> 3D avatar</span>
+          </div>
+        } @else if (!spokenToSigned) {
+          <div class="card-right-overlay-footer left-aligned">
+            <div class="left-actions">
+              <button class="footer-btn" (click)="copyInputText()" title="Copy translation text">
+                <ion-icon name="copy-outline"></ion-icon>
+              </button>
+            </div>
+            <span class="avatar-label-tag">Spoken Text</span>
+          </div>
+        }
+      </div>
+
+    </div>
+
+    <!-- Bottom Features Info -->
+    <div class="bottom-features-section">
+      <button class="arrow-down-btn" (click)="triggerTranslate()" title="Scroll down">
+        <ion-icon name="arrow-down"></ion-icon>
+      </button>
+      <div class="features-list">
+        <span class="feature-bullet"><span class="dot">•</span> 500 char limit</span>
+        <span class="feature-bullet"><span class="dot">•</span> 3 sign languages</span>
+        <span class="feature-bullet"><span class="dot">•</span> Real-time avatar</span>
+      </div>
+    </div>
+
+  </div>
+</ion-content>
