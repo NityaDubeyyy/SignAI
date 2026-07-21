@@ -91,7 +91,6 @@
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true,
-            "webWorkerTsConfig": "tsconfig.worker.json",
             "browser": "src/main.ts",
             "server": "src/main.server.ts",
             "prerender": true,
@@ -153,68 +152,6 @@
           "builder": "@angular/build:extract-i18n",
           "options": {
             "buildTarget": "sign-translate:build"
-          }
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "scss",
-            "fileReplacements": [
-              {
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.test.ts"
-              }
-            ],
-            "assets": [
-              "src/assets",
-              "src/manifest.webmanifest",
-              {
-                "glob": "**/*",
-                "input": "./node_modules/@mediapipe/holistic/",
-                "output": "./assets/models/holistic/"
-              },
-              {
-                "glob": "**/*",
-                "input": "./node_modules/@mediapipe/tasks-text/wasm/",
-                "output": "./assets/models/mediapipe-language-detector/"
-              },
-              {
-                "glob": "*.wasm",
-                "input": "./node_modules/@tensorflow/tfjs-backend-wasm/dist/",
-                "output": "./assets/models/tfjs-backend-wasm/"
-              },
-              {
-                "glob": "*.svg",
-                "input": "./node_modules/flag-icons/flags/1x1/",
-                "output": "./assets/flags/1x1/"
-              },
-              {
-                "glob": "*.ttf",
-                "input": "./node_modules/@sutton-signwriting/font-ttf/font",
-                "output": "./assets/fonts/signwriting/"
-              },
-              {
-                "glob": "**/*.json",
-                "input": "node_modules/@sign-mt/i18n/build/",
-                "output": "./assets/i18n/"
-              },
-              {
-                "glob": "**/*",
-                "input": "node_modules/@sign-mt/browsermt/artifacts/",
-                "output": "./browsermt/"
-              },
-              {
-                "glob": "worker.js",
-                "input": "node_modules/@sign-mt/browsermt/build/bundled/",
-                "output": "./browsermt/"
-              }
-            ],
-            "styles": ["src/theme/styles.scss"],
-            "scripts": [],
-            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "lint": {
