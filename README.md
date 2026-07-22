@@ -1,12 +1,8 @@
-<div align="center">
-  <img src="src/assets/brand/logo.svg" alt="SignAI Logo" width="120" />
+
 
   # SignAI
   
   **Bidirectional Sign Language Translation powered by AI**
-
-  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
-  [![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev/)
 </div>
 
 <br />
